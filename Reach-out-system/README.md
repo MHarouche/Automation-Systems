@@ -22,7 +22,7 @@ Reach-out-system/
     └── src/
         ├── 1-INITIAL/Code.gs    # Step 1 — Initial request emails
         ├── 2-FOLLOW-UP/Code.gs  # Step 2 — Follow-up emails (2nd, 3rd... attempts)
-        └── 3-REMINDER/          # Step 3 — Reminder emails (Code.gs pending)
+        └── 3-REMINDER/Code.gs   # Step 3 — Reminder emails
 ```
 
 ## Flows
@@ -53,7 +53,8 @@ that adds eligible units into two tabs of the working spreadsheet.
    from the send log.
 3. **Reminder (`3-REMINDER`)** — focused email for units with no deposit-return
    information for 30+ days, asking whether the deposit was returned, when, and
-   through which payment method.
+   through which payment method. Uses a 3-week gated driver (weekly trigger +
+   19-day gate), the same pattern as the biweekly flows.
 
 ## Engineering highlights
 
