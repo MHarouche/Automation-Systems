@@ -257,7 +257,7 @@ Have a great day!
     sendSummaryLog_(summary);
 
     if (summary.emailsSent > 0) {
-      postToSlackOD_("Hello @your-team ! On-Demand INITIAL MOS emails have been sent! :)");
+      postToSlackOD_("Hello @your-team ! Department Y INITIAL MOS emails have been sent! :)");
     }
 
     // Append OD MOS Log (after successful run)
@@ -702,7 +702,7 @@ function recordODManualRunNow() {
   Logger.log(" [OD] Manual run recorded at: " + now.toISOString());
 }
 
-/***** SLACK (ON-DEMAND) *****/
+/***** SLACK (DEPARTMENT Y) *****/
 const SLACK_WEBHOOK_URL_OD = "YOUR_SLACK_WEBHOOK_URL";
 
 function postToSlackOD_(message) {
@@ -772,13 +772,13 @@ function collectSampleItemsOD_(maxItems, papappOnly) {
 }
 
 /**
- * Sends a SAMPLE On-Demand move-out email to the maintainer only.
+ * Sends a SAMPLE Department Y move-out email to the maintainer only.
  * Reads REAL rows from the tabs (read-only) so you can see the Move-Out Date column.
  * Does NOT mark confirmation, does NOT log.
  */
 function sendSampleMariODEmail() {
   const recipient = "your-email@example.com";
-  const subject = "SAMPLE – Security Deposit Return & Move-out – On Demand";
+  const subject = "SAMPLE – Security Deposit Return & Move-out – Department Y";
 
   let items = collectSampleItemsOD_(3, false);
   if (items.length === 0) {

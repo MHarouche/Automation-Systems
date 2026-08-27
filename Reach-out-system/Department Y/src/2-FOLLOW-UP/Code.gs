@@ -42,7 +42,7 @@ const OD_MOS_LOG_SHEET_NAME_FU = "MOS Log";
 const OD_MOS_LOG_HEADERS_FU = { citypo: "City-PO", tab: "Tab", date: "Date", emailType: "Email Type" };
 const OD_MOS_LOG_EMAIL_TYPE_FOLLOWUP_FU = "Follow-up MOS";
 
-/***** SLACK (ON-DEMAND) *****/
+/***** SLACK (DEPARTMENT Y) *****/
 // NOTE: postToSlackOD_ lives in the STEP 1 file (shared scope).
 const SLACK_WEBHOOK_URL_OD_FU = "YOUR_SLACK_WEBHOOK_URL";
 
@@ -679,13 +679,13 @@ function testSlackODFollowUpNotification() {
 }
 
 /**
- * Sends a SAMPLE On-Demand follow-up move-out email to the maintainer only.
+ * Sends a SAMPLE Department Y follow-up move-out email to the maintainer only.
  * Reads REAL rows from the tabs (read-only) so you can see the Move-Out Date column.
  * Does NOT mark confirmation, does NOT log.
  */
 function sendSampleMariODFollowUpEmail() {
   const recipient = "your-email@example.com";
-  const subject = "SAMPLE – Follow-up Security Deposit Return & Move-out – On Demand 2nd attempt";
+  const subject = "SAMPLE – Follow-up Security Deposit Return & Move-out – Department Y 2nd attempt";
 
   let items = collectSampleItemsOD_(3, false);
   if (items.length === 0) {

@@ -3,7 +3,7 @@
 /***** CONFIG *****/
 // SOURCE (Source spreadsheet)
 const SOURCE_SS_ID = 'YOUR_SOURCE_SPREADSHEET_ID';
-const SOURCE_SHEET_NAME = 'Dropped-CORE';
+const SOURCE_SHEET_NAME = 'Dropped-DEPARTMENT_X';
 
 // EMAIL CONFIG
 const EMAIL_SUBJECT_PREFIX = "Move-out & Security Deposit Return";
@@ -11,20 +11,20 @@ const MAX_SUBJECT_LENGTH = 150;
 const LOG_RECIPIENTS = ["teammate@example.com", "your-email@example.com"];
 
 // CENTRAL LOG
-const MOS_EMAIL_CORE_LOG_SS_ID = "YOUR_CENTRAL_LOG_SPREADSHEET_ID";
-const MOS_EMAIL_CORE_LOG_SHEET_NAME = "MOS Email CORE";
+const MOS_EMAIL_DEPARTMENT_X_LOG_SS_ID = "YOUR_CENTRAL_LOG_SPREADSHEET_ID";
+const MOS_EMAIL_DEPARTMENT_X_LOG_SHEET_NAME = "MOS Email DEPARTMENT_X";
 
 /**
  * Used by the biweekly driver to remember last successful run time.
  * (Do NOT change this key once deployed.)
  */
-const LAST_SUCCESS_KEY = "MOS_CORE_LAST_SUCCESSFUL_RUN_ISO";
+const LAST_SUCCESS_KEY = "MOS_DEPARTMENT_X_LAST_SUCCESSFUL_RUN_ISO";
 
 /**
- * MOS LOG (CORE)
+ * MOS LOG (DEPARTMENT_X)
  */
-const CORE_MOS_LOG_SHEET_NAME = "MOS Log";
-const CORE_MOS_LOG_HEADERS = { citypo: "City-PO", date: "Date" };
+const DEPARTMENT_X_MOS_LOG_SHEET_NAME = "MOS Log";
+const DEPARTMENT_X_MOS_LOG_HEADERS = { citypo: "City-PO", date: "Date" };
 
 /**
  * MAIN SENDER
@@ -66,7 +66,7 @@ function sendMOSRequests() {
     const logDetails = [];
 
     // MOS Log: track City-POs with successful send (dedupe)
-    const coreLoggedCityPOsThisRun = new Set();
+    const departmentXLoggedCityPOsThisRun = new Set();
 
     for (let i = 1; i < data.length; i++) {
       const row = data[i];
@@ -163,7 +163,7 @@ function sendMOSRequests() {
         // ✅ MOS Log: mark City-PO(s) as successfully sent
         items.forEach(it => {
           const po = String(it.cityPO || "").trim();
-          if (po) coreLoggedCityPOsThisRun.add(po);
+          if (po) departmentXLoggedCityPOsThisRun.add(po);
         });
 
       } catch (e) {
@@ -187,7 +187,7 @@ function sendMOSRequests() {
     // Build log email body (KEEP AS-IS)
     let logHtml = `
     <div style="font-family: Arial, sans-serif; font-size:14px;">
-      <p style="color:#1a73e8;"><strong>CORE Move-out email LOG</strong></p>
+      <p style="color:#1a73e8;"><strong>DEPARTMENT_X Move-out email LOG</strong></p>
       <p>Total emails processed: <strong>${totalEmails}</strong></p>
       <table border="1" cellpadding="3" cellspacing="0" style="border-collapse: collapse; width:auto;">
         <tr style="background-color:#e8f0fe;">
@@ -208,15 +208,15 @@ function sendMOSRequests() {
 
     logHtml += `</table></div>`;
 
-    GmailApp.sendEmail(LOG_RECIPIENTS.join(","), "CORE Move-out email LOG", "", { htmlBody: logHtml });
+    GmailApp.sendEmail(LOG_RECIPIENTS.join(","), "DEPARTMENT_X Move-out email LOG", "", { htmlBody: logHtml });
 
     if (totalEmails > 0) {
-      postToSlackCore_("Hello @your-team ! Core MOS emails have been sent! :)");
+      postToSlackDepartmentX_("Hello @your-team ! DepartmentX MOS emails have been sent! :)");
     }
 
-    // Append CORE MOS Log (after successful run)
-    if (coreLoggedCityPOsThisRun.size > 0) {
-      appendCoreMOSLogRows_([...coreLoggedCityPOsThisRun], new Date());
+    // Append DEPARTMENT_X MOS Log (after successful run)
+    if (departmentXLoggedCityPOsThisRun.size > 0) {
+      appendDepartmentXMOSLogRows_([...departmentXLoggedCityPOsThisRun], new Date());
     }
 
     Logger.log("Emails processed: " + totalEmails);
@@ -234,30 +234,30 @@ function sendMOSRequests() {
     executionComment = "Error: " + (err && err.message ? err.message : err);
     throw err;
   } finally {
-    logMOSEmailCoreExecution_(functionName, executionStart, executionStatus, executionComment);
+    logMOSEmailDepartmentXExecution_(functionName, executionStart, executionStatus, executionComment);
   }
 }
 
 
 /**
- * CORE MOS LOG helper
+ * DEPARTMENT_X MOS LOG helper
  * Appends [City-PO, Date] to the MOS Log tab in the source spreadsheet.
  * Always appends below last row; does not overwrite.
  * Forces date number format on the Date column.
  */
-function appendCoreMOSLogRows_(citypoList, dateObj) {
+function appendDepartmentXMOSLogRows_(citypoList, dateObj) {
   if (!citypoList || citypoList.length === 0) return;
 
   const ss = SpreadsheetApp.openById(SOURCE_SS_ID);
-  const logSheet = ss.getSheetByName(CORE_MOS_LOG_SHEET_NAME);
-  if (!logSheet) throw new Error(`CORE MOS Log sheet not found: "${CORE_MOS_LOG_SHEET_NAME}"`);
+  const logSheet = ss.getSheetByName(DEPARTMENT_X_MOS_LOG_SHEET_NAME);
+  if (!logSheet) throw new Error(`DEPARTMENT_X MOS Log sheet not found: "${DEPARTMENT_X_MOS_LOG_SHEET_NAME}"`);
 
   const headerRow = logSheet.getRange(1, 1, 1, logSheet.getLastColumn()).getValues()[0];
-  const colCityPO = headerRow.indexOf(CORE_MOS_LOG_HEADERS.citypo) + 1;
-  const colDate = headerRow.indexOf(CORE_MOS_LOG_HEADERS.date) + 1;
+  const colCityPO = headerRow.indexOf(DEPARTMENT_X_MOS_LOG_HEADERS.citypo) + 1;
+  const colDate = headerRow.indexOf(DEPARTMENT_X_MOS_LOG_HEADERS.date) + 1;
 
   if (!colCityPO || !colDate) {
-    throw new Error(`CORE MOS Log headers missing. Need: "${CORE_MOS_LOG_HEADERS.citypo}" and "${CORE_MOS_LOG_HEADERS.date}"`);
+    throw new Error(`DEPARTMENT_X MOS Log headers missing. Need: "${DEPARTMENT_X_MOS_LOG_HEADERS.citypo}" and "${DEPARTMENT_X_MOS_LOG_HEADERS.date}"`);
   }
 
   const startRow = logSheet.getLastRow() + 1;
@@ -271,17 +271,17 @@ function appendCoreMOSLogRows_(citypoList, dateObj) {
   logSheet.getRange(startRow, colDate, dateValues.length, 1).setNumberFormat("yyyy-mm-dd");
 }
 
-function logMOSEmailCoreExecution_(functionName, executionStart, status, comment) {
+function logMOSEmailDepartmentXExecution_(functionName, executionStart, status, comment) {
   try {
     const executionEnd = new Date();
     const durationSec = Math.round(((executionEnd.getTime() - executionStart.getTime()) / 1000) * 100) / 100;
 
-    const ss = SpreadsheetApp.openById(MOS_EMAIL_CORE_LOG_SS_ID);
-    const sheet = ss.getSheetByName(MOS_EMAIL_CORE_LOG_SHEET_NAME);
-    if (!sheet) throw new Error('Log sheet not found: "' + MOS_EMAIL_CORE_LOG_SHEET_NAME + '"');
+    const ss = SpreadsheetApp.openById(MOS_EMAIL_DEPARTMENT_X_LOG_SS_ID);
+    const sheet = ss.getSheetByName(MOS_EMAIL_DEPARTMENT_X_LOG_SHEET_NAME);
+    if (!sheet) throw new Error('Log sheet not found: "' + MOS_EMAIL_DEPARTMENT_X_LOG_SHEET_NAME + '"');
 
     const lastCol = Math.max(1, sheet.getLastColumn());
-    const headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(h => normalizeCoreCentralLogHeader_(h));
+    const headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(h => normalizeDepartmentXCentralLogHeader_(h));
 
     const colFunction = headers.indexOf("function") + 1;
     const colTimestamp = headers.indexOf("timestamp") + 1;
@@ -302,11 +302,11 @@ function logMOSEmailCoreExecution_(functionName, executionStart, status, comment
     sheet.getRange(targetRow, colComment).setValue(comment || "");
 
   } catch (logErr) {
-    Logger.log("Could not write MOS Email CORE central log: " + String(logErr));
+    Logger.log("Could not write MOS Email DEPARTMENT_X central log: " + String(logErr));
   }
 }
 
-function normalizeCoreCentralLogHeader_(s) {
+function normalizeDepartmentXCentralLogHeader_(s) {
   return String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
@@ -370,14 +370,14 @@ function recordManualRunNow() {
 }
 
 /**
- * Sends a SAMPLE CORE move-out email to the maintainer only.
+ * Sends a SAMPLE DEPARTMENT_X move-out email to the maintainer only.
  * Does NOT read the sheet, does NOT mark confirmation, does NOT log.
  */
-function sendSampleCOREEmail() {
+function sendSampleDEPARTMENT_XEmail() {
   const recipient = "your-email@example.com";
-  const subject = "SAMPLE – Move-out & Security Deposit Return – CORE";
+  const subject = "SAMPLE – Move-out & Security Deposit Return – DEPARTMENT_X";
 
-  // Sample table (same structure as CORE script)
+  // Sample table (same structure as DEPARTMENT_X script)
   const textTable = `
     <table border="1" cellpadding="3" cellspacing="0" style="border-collapse: collapse; width:auto;">
       <tr style="background-color:#e8f0fe;">
@@ -387,13 +387,13 @@ function sendSampleCOREEmail() {
         <th style="text-align:left; padding:3px;">Internal no.</th>
       </tr>
       <tr style="background-color:#ffffff;">
-        <td style="padding:3px;">Sample Core Building LLC</td>
+        <td style="padding:3px;">Sample DepartmentX Building LLC</td>
         <td style="padding:3px;">816</td>
         <td style="padding:3px;">05/15/2026</td>
         <td style="padding:3px;">SEA-637</td>
       </tr>
       <tr style="background-color:#f5f5f5;">
-        <td style="padding:3px;">Sample Core Building LLC</td>
+        <td style="padding:3px;">Sample DepartmentX Building LLC</td>
         <td style="padding:3px;">204</td>
         <td style="padding:3px;">05/28/2026</td>
         <td style="padding:3px;">CHI-140</td>
@@ -401,10 +401,10 @@ function sendSampleCOREEmail() {
     </table>
   `;
 
-  // Updated CORE body (matches your current script wording)
+  // Updated DEPARTMENT_X body (matches your current script wording)
   const htmlBody = `
     <div style="font-family: Arial, sans-serif; font-size:14px; color:#000000;">
-      <p>Hello <strong>Sample Core Building LLC</strong>,</p>
+      <p>Hello <strong>Sample DepartmentX Building LLC</strong>,</p>
 
       <p>We’re reaching out on behalf of <strong>[Company] Inc.</strong>, a furnished rental company managing flexible-stay apartments across the US and globally.</p>
 
@@ -433,18 +433,18 @@ function sendSampleCOREEmail() {
   GmailApp.sendEmail(recipient, subject, "", { htmlBody });
 }
 
-/***** SLACK (CORE) *****/
-const SLACK_WEBHOOK_URL_CORE = "YOUR_SLACK_WEBHOOK_URL";
+/***** SLACK (DEPARTMENT_X) *****/
+const SLACK_WEBHOOK_URL_DEPARTMENT_X = "YOUR_SLACK_WEBHOOK_URL";
 
-function postToSlackCore_(message) {
-  if (!SLACK_WEBHOOK_URL_CORE) {
+function postToSlackDepartmentX_(message) {
+  if (!SLACK_WEBHOOK_URL_DEPARTMENT_X) {
     Logger.log("Slack webhook URL is empty.");
     return;
   }
 
   const payload = { text: message };
 
-  const res = UrlFetchApp.fetch(SLACK_WEBHOOK_URL_CORE, {
+  const res = UrlFetchApp.fetch(SLACK_WEBHOOK_URL_DEPARTMENT_X, {
     method: "post",
     contentType: "application/json",
     payload: JSON.stringify(payload),
@@ -459,6 +459,6 @@ function postToSlackCore_(message) {
  * Test Slack without sending any emails.
  * Run this manually to authorize UrlFetchApp and validate the webhook.
  */
-function testSlackCoreNotification() {
-  postToSlackCore_("Hello @your-team ! Test message (no emails sent).");
+function testSlackDepartmentXNotification() {
+  postToSlackDepartmentX_("Hello @your-team ! Test message (no emails sent).");
 }

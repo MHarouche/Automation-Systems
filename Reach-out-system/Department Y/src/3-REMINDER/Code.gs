@@ -30,7 +30,7 @@ const OD_MOS_LOG_SHEET_NAME_RE = "MOS Log";
 const OD_MOS_LOG_HEADERS_RE = { citypo: "City-PO", tab: "Tab", date: "Date", emailType: "Email Type" };
 const OD_MOS_LOG_EMAIL_TYPE_REFUND_RE = "MOS refund request";
 
-// Slack (On-Demand)
+// Slack (Department Y)
 const SLACK_WEBHOOK_URL_OD_RE = "YOUR_SLACK_WEBHOOK_URL";
 
 /**

@@ -16,9 +16,9 @@ Created by **Mari Harouche**.
 
 ```
 Reach-out-system/
-├── Core/
-│   └── src/Code.gs              # Core sender (source spreadsheet flow)
-└── On-Demand/
+├── Department X/
+│   └── src/Code.gs              # Department X sender (source spreadsheet flow)
+└── Department Y/
     └── src/
         ├── 1-INITIAL/Code.gs    # Step 1 — Initial request emails
         ├── 2-FOLLOW-UP/Code.gs  # Step 2 — Follow-up emails (2nd, 3rd... attempts)
@@ -27,7 +27,7 @@ Reach-out-system/
 
 ## Flows
 
-### Core
+### Department X
 
 A single script attached to the source spreadsheet. Sends aggregated request
 emails every 15 days, on Mondays, based on send flags maintained in the sheet.
@@ -38,7 +38,7 @@ timestamp stored in Script Properties — if fewer than ~13 days have passed
 (threshold 11 to absorb trigger-time jitter), it skips and waits for the next
 Monday that satisfies the rule.
 
-### On-Demand pipeline
+### Department Y pipeline
 
 Three scripts in the same Apps Script project, fed by an upstream automation
 that adds eligible units into two tabs of the working spreadsheet.
@@ -48,7 +48,7 @@ that adds eligible units into two tabs of the working spreadsheet.
    building category gets a dedicated template.
 2. **Follow-ups (`2-FOLLOW-UP`)** — for units with a deposit still to be
    returned and no reply to the Initial email after 15+ days. Uses the same
-   biweekly driver pattern as Core. Same template as the Initial, with
+   biweekly driver pattern as Department X. Same template as the Initial, with
    "Follow-up" and the attempt number (2nd, 3rd...) in the subject, computed
    from the send log.
 3. **Reminder (`3-REMINDER`)** — focused email for units with no deposit-return
