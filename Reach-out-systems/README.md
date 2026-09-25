@@ -1,4 +1,4 @@
-# Reach-out System
+# Reach-out Systems
 
 A fully automated email reach-out system built on Google Apps Script. It
 requests move-out documents and security deposit returns from property
@@ -15,14 +15,18 @@ Created by **Mari Harouche**.
 ## Architecture
 
 ```
-Reach-out-system/
+Reach-out-systems/
 ├── Department X/
 │   └── src/Code.gs              # Department X sender (source spreadsheet flow)
-└── Department Y/
+├── Department Y/
     └── src/
         ├── 1-INITIAL/Code.gs    # Step 1 — Initial request emails
         ├── 2-FOLLOW-UP/Code.gs  # Step 2 — Follow-up emails (2nd, 3rd... attempts)
         └── 3-REMINDER/Code.gs   # Step 3 — Reminder emails
+├── Department-Z/
+│   └── Automated-ReachOut/      # Intake, enrichment, delivery, and tracking
+├── tax-reduction-system/        # Data audit and grouped fee outreach
+└── contract-renew-system/       # Thread-aware contract follow-ups
 ```
 
 ## Flows
@@ -83,3 +87,5 @@ that adds eligible units into two tabs of the working spreadsheet.
    `[Company]` strings).
 3. Run the `installMonday...Trigger()` functions once to install the weekly
    triggers, and the `record...RunNow()` helpers to seed the biweekly drivers.
+
+Each subproject has its own README with its data flow, setup, and safety controls.

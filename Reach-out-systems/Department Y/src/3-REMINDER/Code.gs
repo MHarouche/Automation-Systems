@@ -687,7 +687,7 @@ const MOS_OD_REFUND_MIN_DAYS_RE = 19;
 /**
  * Weekly driver (Wednesday 10:00 AM, gated at >= 19 days since last success)
  */
-function refundEvery3WeeksDriver_RE() {
+function refundEvery3WeeksDriver_DepartmentY() {
   const props = PropertiesService.getScriptProperties();
 
   const now = new Date();
@@ -715,22 +715,22 @@ function refundEvery3WeeksDriver_RE() {
  * Install weekly Wednesday 10:00 AM trigger (project timezone).
  * Run this once manually.
  */
-function installRefundWed10amTrigger_RE() {
+function installRefundWed10amTrigger_DepartmentY() {
   // Safety: remove old triggers for this driver to avoid duplicates
   ScriptApp.getProjectTriggers().forEach(t => {
     const fn = t.getHandlerFunction();
-    if (fn === "refundEvery3WeeksDriver_RE") {
+    if (fn === "refundEvery3WeeksDriver_DepartmentY") {
       ScriptApp.deleteTrigger(t);
     }
   });
 
-  ScriptApp.newTrigger("refundEvery3WeeksDriver_RE")
+  ScriptApp.newTrigger("refundEvery3WeeksDriver_DepartmentY")
     .timeBased()
     .onWeekDay(ScriptApp.WeekDay.WEDNESDAY)
     .atHour(10) // runs sometime between 10:00 and 11:00
     .create();
 
-  Logger.log("Installed weekly Wednesday 10:00 AM trigger for refundEvery3WeeksDriver_RE().");
+  Logger.log("Installed weekly Wednesday 10:00 AM trigger for refundEvery3WeeksDriver_DepartmentY().");
 }
 
 /**

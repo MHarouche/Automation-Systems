@@ -343,7 +343,7 @@ function installMondayODFollowUpTrigger() {
  * so the next send happens on Monday June 22, 2026.
  * Run this ONCE after deploying.
  */
-function recordODFollowUpLastRunJune8_2026() {
+function recordDepartmentYFollowUpLastRunJune8_2026() {
   const props = PropertiesService.getScriptProperties();
   const june8 = new Date(2026, 5, 8, 10, 30, 0); // months are 0-based: 5 = June
   props.setProperty(MOS_OD_FOLLOWUP_LAST_SUCCESS_KEY_FU, june8.toISOString());

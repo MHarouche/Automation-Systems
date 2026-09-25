@@ -23,6 +23,8 @@ Issues and pending conditions are written to `Warnings`, including a human-reada
 | `src/NotificationPipeline.gs` | Channel capture, queue processing, duplicate protection, sending, tracking, labels, warnings and thread replies. |
 | `src/SourceDataImport.gs` | Imports the newest exact-subject source CSV from email. |
 | `src/ReferenceDataImport.gs` | Combines unique attachments from the newest reference-data export. |
+| `src/FastPathImport.gs` | Imports a recent-source snapshot used while the primary warehouse feed is delayed. |
+| `src/DirectSourceImport.gs` | Imports a direct CRM report used as a fresher fallback source. |
 | `src/appsscript.json` | V8 runtime and time-zone configuration. |
 
 ## Required placeholders
